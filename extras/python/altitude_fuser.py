@@ -24,6 +24,7 @@ from realtime_plot import RealtimePlotter
 from time import sleep
 import threading
 from math import sin, pi
+import pdb
 
 # ground-truth AGL to sonar measurement, empirically determined:
 # see http://diydrones.com/profiles/blogs/altitude-hold-with-mb1242-sonar
@@ -92,6 +93,7 @@ class ASL_Plotter(RealtimePlotter):
 
     def __init__(self):
 
+        print("ASL_Plotter")
         self.ekf = ASL_EKF()
 
         self.baro = 0
@@ -119,7 +121,8 @@ class ASL_Plotter(RealtimePlotter):
     def update(self):
 
         while True:
-
+            # if self.xcurr >= 1:
+            #     pdb.set_trace()
             self.baro, self.sonar = self.getSensors()
 
             # Run the EKF on the current baro and sonar measurements, getting back
@@ -141,6 +144,7 @@ class _Sim_ASLPlotter(ASL_Plotter):
 
     def __init__(self):
 
+        print("_Sim_ASLPlotter")
         ASL_Plotter.__init__(self)
         self.count = 0
 
