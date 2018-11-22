@@ -62,7 +62,7 @@ def plot_two_sensor_ekf(count_list, altitude_meas1_list, altitude_meas2_list, al
     plt.plot(count_list, altitude_meas1_list,'b')
     plt.plot(count_list, altitude_meas2_list,'g')
     plt.plot(count_list, altitude_est_list,'r')
-    plt.legend(('alt meas','alt est'))
+    plt.legend(('Alt meas from gps1', 'Alt meas from gps2','Alt est from EKF'))
     plt.show()
 
 if __name__ == '__main__':
