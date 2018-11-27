@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 LOOPSIZE = 1000
 # These are parameter of EKF, for sensor and process noise. we are using the same one for the EKFs
 r = 1.0
-q = 0
+q = 0.2
 
 def simulation():
     # Sensor data noise need to be Gaussian.  I am also using 0 mean here for simplicity
@@ -24,8 +24,9 @@ def nl_simulation(count):
     # Sensor data noise need to be Gaussian.  I am also using 0 mean here for simplicity
     # The state is position and velocity.  The velocity is the derivetive of position
     S_truth = [[10 * sin(count * pi/180)] ,  [10 * pi/180 * cos(count * pi/180)]]
-    S1_meas = [[alt_truth + r * (np.random.rand()-0.5)] , S_truth[1]]
-    S2_meas = [[alt_truth + r * (np.random.rand()-0.5)] , S_truth[1]]
+    noise = [[r * (np.random.rand() - 0.5)], [r * (np.random.rand() - 0.5)]]
+    S1_meas = np.add(S_truth, noise)
+    S2_meas = np.add(S_truth, noise)
     return S_truth, S1_meas, S2_meas
 
 # This function is for plotting sim and EKF data generated from 1 sensor
@@ -39,7 +40,6 @@ def plot_one_sensor(count_list, alt_truth_list, alt_meas_list, alt_est_list):
 
 # This function is for plotting sim and EKF data generated from 2 sensors
 def plot_two_sensors(count_list, alt_truth_list, alt_meas1_list, alt_meas2_list, alt_est_list):
-    plt.axis([0, LOOPSIZE, -10, 15])
     plt.plot(count_list, alt_truth_list,'b')
     plt.plot(count_list, alt_meas1_list,'g')
     plt.plot(count_list, alt_meas2_list,'y')
@@ -128,8 +128,9 @@ if __name__ == '__main__':
 
         count += 1
 
-    # print("----plotting kf for two gps----")
-    # plot_two_sensors(count_list, alt_truth_list, alt_meas1_list, alt_meas2_list, ekf_alt_est_list)
+    print("----plotting kf for two gps----")
+    plt.axis([0, LOOPSIZE, 5, 15])
+    plot_two_sensors(count_list, alt_truth_list, alt_meas1_list, alt_meas2_list, ekf_alt_est_list)
 
 
     ###################################
@@ -177,7 +178,7 @@ if __name__ == '__main__':
 
         count += 1
 
-    print("----plotting kf for two gps----")
+    print("----plotting NL EKF----")
     plot_two_sensors(count_list, alt_truth_list, alt_meas1_list, alt_meas2_list, ekf_alt_est_list)
 
 
